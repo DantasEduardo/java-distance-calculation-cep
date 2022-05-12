@@ -1,53 +1,35 @@
 public class test {
-    public  static Double calculoRad(Double value){
-        return Math.toRadians(value);
-    }
-
-    public static Double diff(Double ini, Double fin){
-        Double value = ini-fin;
-        if (value<0){
-            value=value*-1;
-        }
-        return value;
-    }
-
-    public static Double calculoSenCos(Double lat, Double lon, Double latIni, Double latFin){
-        Double sin1 = Math.sin(lat/2);
-        Double sin2 = Math.sin(lon/2);
-
-        Double value = ((sin1*sin1) + Math.cos(latIni) * Math.cos(latFin) *(sin2*sin2));
-
-        return value;
-    }
-
-    public static Double calculoCot(Double senCos){
-        Double sqrt1 = Math.sqrt(senCos);
-        Double sqrt2 = Math.sqrt(1-senCos);
-        Double tan = Math.tan(sqrt1/sqrt2);
-
-        Double value = 2 * (1/tan);
-        return value;
+    private static Double toRad(Double value) {
+        return (value * Math.PI) / 180;
     }
 
     public static Double calcularDisntancia(Double[] lugar1, Double[] lugar2){
-        Double longitudeIni = lugar1[0];
-        Double latitudeIni = lugar1[1];
-        Double longitudeFin = lugar2[0];
-        Double latitudeFin = lugar2[1];
+        Double long1 = toRad(lugar1[0]);
+        Double lati1 = toRad(lugar1[1]);
+        Double long2 = toRad(lugar2[0]);
+        Double lati2 = toRad(lugar2[1]);
 
-        Double longitudeIniRad = calculoRad(longitudeIni);
-        Double latitudeIniRad = calculoRad(latitudeIni);
-        Double longitudeFinRad = calculoRad(longitudeFin);
-        Double latitudeFinRad = calculoRad(latitudeFin);
+        Double dlon = long2 - long1;
+        Double dlat = lati2 - lati1;
 
-        Double longitude = diff(longitudeIniRad,longitudeFinRad);
-        Double latitude = diff(latitudeIniRad,latitudeFinRad);
+        Double sinDlatSquare = Math.pow(Math.sin(dlat/2),2);
+        Double sinDlonSquare = Math.pow(Math.sin(dlon/2),2);
 
-        Double senCos = calculoSenCos(longitude,latitude,latitudeIniRad,latitudeFinRad);
+        Double a = sinDlatSquare + Math.cos(lati1) * Math.cos(lati2) * sinDlonSquare;
 
-        Double cot = calculoCot(senCos);
+        Double b = 2*(Math.asin(Math.sqrt(a)));
 
-        return 6.371 * cot;
+        return 6371 * b;
+            /*
+    *   dlon = lon2 - lon1
+        dlat = lat2 - lat1
+        a = (sin(dlat/2))^2 + cos(lat1) * cos(lat2) * (sin(dlon/2))^2
+        c = 2 * atan2( sqrt(a), sqrt(1-a) )
+        d = R * c
+
+        R = 6367 km
+    *
+    * */
     }
 
     public static void main(String[] args) {
@@ -63,8 +45,8 @@ public class test {
         Double[] lonLat = {-46.4805177,-23.5041115};
         Double[] lonLat2 = {-46.66162834754086,-23.55802478862016};
 
-        Double[] lonLatTESTE = {-118.2436,34.0522};
-        Double[] lonLat2TESTE = {139.7514,-35.6850};
+        Double[] lonLatTESTE = {-46.6388,-23.5489};
+        Double[] lonLat2TESTE = {-43.2096,-22.9035};
 
         Double teste = calcularDisntancia(lonLatTESTE,lonLat2TESTE);
         System.out.println(teste);
