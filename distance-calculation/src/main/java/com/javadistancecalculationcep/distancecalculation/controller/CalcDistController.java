@@ -44,7 +44,6 @@ public class CalcDistController {
 
         Double dist = calcularDisntancia(lonlat1,lonlat2);
 
-        System.out.println("DIST: "+dist);
         return ResponseEntity.status(200).body(dist);
     }
 
@@ -101,8 +100,6 @@ public class CalcDistController {
 
         Double b = 2*(Math.asin(Math.sqrt(a)));
 
-        System.out.println("AAAAAAAAAAAAAAAAAAAAA: " + a);
-        System.out.println("BBBBBBBBBBBBBBBBBBBBB: " + b);
         return 6371 * b;
             /*
     *   dlon = lon2 - lon1
